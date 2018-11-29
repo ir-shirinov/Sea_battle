@@ -1,6 +1,6 @@
+// Случайная расстановка кораблей
 import tools from './tools';
 import setting from './setting';
-
 
 // Функция которая возвращает все координаты ячеек, которые занимает корабль. В зависиомости от направления выбирается случайная начальная ячейка с учетом того, чтобы корабль не вылез за пределы поля.
 const returnPositionShip = function (orient, lengthShips) {
@@ -43,7 +43,6 @@ const returnPositionShip = function (orient, lengthShips) {
   return arr;
 
 };
-
 
 // Функция добавления соседних клеток. Сперва находим все соседние клетки. Если координаты этих клеток не превышают поле то добавляем их. Возвращаем массив, удаляя повторяющиеся значения
 const addPositionNear = function (pos) {
@@ -95,7 +94,6 @@ const crossShips = function (position, battlefield) {
   return flag;
 };
 
-
 // Добавлении в массив информации о корабле 
 const addDataField = function (battlefield, ships) {
   
@@ -105,8 +103,6 @@ const addDataField = function (battlefield, ships) {
     battlefield[y][x] = ships.length;
   }
 };
-
-
 
 // Расставление кораблей в случайно порядке
 export default function (battlefield) {

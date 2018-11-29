@@ -48,7 +48,7 @@ export default {
         return clearInterval(interval);
       };
       element.innerHTML += txt.shift();
-    }, 50);
+    }, 40);
 
     // Удаляем сообщения, если их больше 20
     if (ele.childNodes.length > 20) {
@@ -56,7 +56,5 @@ export default {
         ele.removeChild(ele.lastElementChild);
       };
     };
-
   }
-
 };

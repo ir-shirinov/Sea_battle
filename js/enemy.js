@@ -1,9 +1,11 @@
+// Действия врага
 import gf from './game_function';
 import tools from './tools';
 import setting from './setting';
+import showShips from './show_ships';
 
 // Вспомогательная функция, возвращает координаты по которым нужно стрелять
-const getPointShoot = function(set, field) {
+const getPointShoot = function (set, field) {
   // Если есть последний удачный выстрел(подбили корабль но не потопили) и он один, то обстреливаем соседние клетки
   if ((set.positionEnemy[0][0] !== -1) && (set.positionEnemy.length === 1)) {
     let xGoodShoot = set.positionEnemy[0][0];
@@ -86,11 +88,11 @@ const getPointShoot = function(set, field) {
   }
 
   return [xShoot, yShoot];
-
-
 }
 
-export default function (settingCurrentGame, elemFieldUser, info) {
+
+// Один ход врага
+const enemyStep = function (settingCurrentGame, elemFieldUser, info, elemFieldEnemy) {
 
   // Выбираем случайную клетку для обстрела, отсекая уже обстреленные клетки
   let [x, y] = getPointShoot(settingCurrentGame, settingCurrentGame.fieldUser);  
@@ -137,10 +139,34 @@ export default function (settingCurrentGame, elemFieldUser, info) {
   // Удар по пустой клетке
   } else if (settingCurrentGame.fieldUser[y][x] === 0) {
     tools.writeText(info, `${settingCurrentGame.enemyName} промахнулся - ваш ход`, 2);
+    elemFieldEnemy.classList.add('app__field--active');
     // Записываем данные о промахе в массив и отрисовываем на карте
     settingCurrentGame.fieldUser[y][x] = 6;
     cellElement.classList.add('app__miss');
     // Передаем ход пользователю
     settingCurrentGame.flagUser = true;
   }
+};
+
+
+
+// Ходит враг
+export default function (settingCurrentGame, elemFieldUser, info, elemFieldEnemy) {
+  // Запускаем ход компьютера с разными задержками, чтобы создать ощущения как будто Враг думает как живой, то быстро то медленно. 
+  setTimeout(function run() {
+    enemyStep(settingCurrentGame, elemFieldUser, info, elemFieldEnemy);
+
+    // Если после хода врага, у игрока больше нет кораблей, значит выйграл Враг
+    if (settingCurrentGame.shipsUserNumber === 0) {
+      settingCurrentGame.flagUser = false;
+      gf.paintAllCellsPoint(elemFieldUser);
+      tools.writeText(info, 'Вы проиграли', 3);
+      tools.writeText(info, `${settingCurrentGame.enemyName}:  ${setting.enemyWin[tools.randomInteger(0, setting.enemyWin.length - 1)] }`, 3);
+      // Отрисуем поле, если выйграл ПК
+      showShips(settingCurrentGame.fieldEnemy, elemFieldEnemy);
+    } else if (!settingCurrentGame.flagUser) {
+      setTimeout(run, tools.randomInteger(500, 1500));
+    };
+
+  }, 1000);
 };

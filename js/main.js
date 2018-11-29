@@ -3,7 +3,7 @@ import putShips from './random_put_ships';
 import showShips from './show_ships';
 import tools from './tools';
 import gf from './game_function';
-import enemyStep from './enemy';
+import goEnemy from './enemy';
 
 // Окно для отображения информации 
 const info = document.querySelector('#info');
@@ -12,32 +12,11 @@ const elemFieldUser = document.querySelector('.app__field--user');
 const elemFieldEnemy = document.querySelector('.app__field--enemy');
 // Настройки текущей игры
 let settingCurrentGame;
-
-// Если браузер firfox, то убираем полосу прокрутки, т.к. ее стилизация через плагин
-if ((navigator.userAgent.search(/Firefox/)) > 0) {
-  info.classList.add('app__oveflow-hidden');
-}
-
-
-// Ход врага
-const goEnemy = function () {
-  // Запускаем ход компьютера с разными задержками, чтобы создать ощущения как будто Враг думает как живой, то быстро то медленно. 
-  setTimeout(function run() {
-    enemyStep(settingCurrentGame, elemFieldUser, info);
-
-    // Если после хода врага, у игрока больше нет кораблей, значит выйграл Враг
-    if (settingCurrentGame.shipsUserNumber === 0) {
-      settingCurrentGame.flagUser = false;
-      tools.writeText(info, 'Вы проиграли', 3);
-      tools.writeText(info, `${settingCurrentGame.enemyName}:  ${setting.enemyWin[tools.randomInteger(0, setting.enemyWin.length - 1)] }`, 3);
-      // Отрисуем поле, если выйграл ПК
-      showShips(settingCurrentGame.fieldEnemy,elemFieldEnemy);
-    } else if (!settingCurrentGame.flagUser) {
-      setTimeout(run, tools.randomInteger(100, 100));
-    };
-
-  }, 100);
-};
+// Окно ввода и поле ввода имени
+const nameWindow = document.querySelector('.app__poppup');
+const name = document.querySelector('#name');
+// Сложность игры
+let hardGame;
 
 // Обработка событий при выстреле пользователя
 elemFieldEnemy.addEventListener('click', function(evt) {
@@ -69,6 +48,7 @@ elemFieldEnemy.addEventListener('click', function(evt) {
           showShips(settingCurrentGame.fieldEnemy,elemFieldEnemy);
           tools.writeText(info, 'Конец игры, Вы выйграли', 3);
           tools.writeText(info, `${settingCurrentGame.enemyName}:  ${setting.enemyLose[tools.randomInteger(0, setting.enemyLose.length - 1)] }`, 3);
+          gf.paintAllCellsPoint(elemFieldEnemy);
         }
 
       } else {
@@ -78,27 +58,25 @@ elemFieldEnemy.addEventListener('click', function(evt) {
     
     // Пользователь не попал в корабль
     } else if (settingCurrentGame.fieldEnemy[y][x] === 0) {
-    
       tools.writeText(info, `Вы промахнулись - ходит ${settingCurrentGame.enemyName}`, 1);
+      elemFieldEnemy.classList.remove('app__field--active');
       //Запрещаем ход игроку
       settingCurrentGame.flagUser = false;
       // Записываем данные о промахе в массив и отрисовываем на карте
       settingCurrentGame.fieldEnemy[y][x] = 6;
       cell.classList.add('app__miss');
-
       // Передаем ход врагу
-      goEnemy();
-      
+      goEnemy(settingCurrentGame, elemFieldUser, info, elemFieldEnemy);
     }
-
   }
 });
 
 // Функция начала игры
-const startGame = function () {
+const startNewGame = function () {
   // Очищаем отображение полей от прошлых кораблей и очищаем консоль
   gf.clearHtml();
   gf.clearConsole(info);
+
   // Иницируем новые настройки игры
   settingCurrentGame = {
     // Массив поля пользователя и врага c расставленными кораблями. Т.к. массив - это массив с массивами, их нужно глубоко копипровать, поэтому используем трюк с JSON
@@ -114,11 +92,11 @@ const startGame = function () {
     // Флаг, который запускает обработку событий, если ходит именно игрок
     flagUser: false,
     // Сложность игры
-    hard: 10,
+    hard: hardGame || 0,
     // Последний удачные ход пк, если его нет, то записываем -1, -1
     positionEnemy: [[-1, -1]],
     // Выбираем кто делает первый ход (0 - пользователь)
-    number: tools.randomInteger(0, 1),
+    number: tools.randomInteger(0, 1)
   };
 
   // Отрисовка кораблей пользователя, имени врага
@@ -128,26 +106,49 @@ const startGame = function () {
   // Отдаем право первого хода случаному игроку
   if (settingCurrentGame.number === 0) {
     settingCurrentGame.flagUser = true;
+    elemFieldEnemy.classList.add('app__field--active');
     tools.writeText(info, 'Первым ходите Вы', 3);
   } else {
     tools.writeText(info, `Первым ходит ${settingCurrentGame.enemyName}`, 3);
-    goEnemy();
+    goEnemy(settingCurrentGame, elemFieldUser, info, elemFieldEnemy);
   };
 }
 
-// Обработка событий при нажатии Новая игра
+// Обработка событий при нажатии Новая игра. Имя игрока записываем над полем
 const newGameBtn = document.querySelector('#new');
 newGameBtn.addEventListener('click', function() {
-  startGame();
-  console.log(settingCurrentGame);
+  document.querySelector('.app__user').textContent = name.value || 'Неизвестный игрок';
+  name.value = '';
+  nameWindow.classList.add('app__hidden');
+  // Находим какую сложность выбрал игрок
+  let hardRadio = document.querySelector('input[type="radio"]:checked');
+  switch (hardRadio.id) {
+    case 'easy': {
+      hardGame = 0;
+      break;
+    }
+    case 'middle': {
+      hardGame = 3;
+      break;
+    }
+    case 'heavy': {
+      hardGame = 5;
+      break;
+    }  
+  }
+  startNewGame();
 })
 
+// Обработка события если игрок нажал Enter введя имя
+name.addEventListener('keypress', function(evt) {
+  if (evt.keyCode === 13) {
+    newGameBtn.click();
+  };
+});
 
-//Запуск игры
-startGame();
-console.log(settingCurrentGame);
-      
+// Обработка событий при нажатии Начать сначала
+const restartGameBtn = document.querySelector('#restart');
+restartGameBtn.addEventListener('click', function() {
+  nameWindow.classList.remove('app__hidden');
+})
 
-      
-      
-      

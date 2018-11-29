@@ -19,9 +19,9 @@ var gulp = require("gulp");
 
 var path = {
   build: {
-      html: './build/',
-      js: './build/js/',
-      css: './build/css/'
+      html: './docs/',
+      js: './docs/js/',
+      css: './docs/css/'
   },
   src: {
       html: './index.html', 
@@ -35,7 +35,7 @@ var path = {
       js: 'js/**/*.js',
       style: "./sass/**/*.{scss,sass}"
   },
-  site: "./build"
+  site: "./docs"
 };
 
 gulp.task("html", function(){
@@ -49,17 +49,16 @@ gulp.task("html", function(){
 gulp.task("js", function(){
   return gulp.src(path.src.js)
   	.pipe(plumber())
-    //.pipe(sourcemaps.init())
     .pipe(rollup({
     	input: path.src.mainjs,
       output: {
         format: 'iife'
       }
     }))
-    //.pipe(babel({
-    //    presets: ['@babel/env']
-    //  }))
-    //.pipe(sourcemaps.write('.'))
+    .pipe(babel({
+      presets: ['@babel/env']
+    }))
+    .pipe(uglify())
     .pipe(gulp.dest(path.build.js))
     .pipe(browserSync.stream());
 })

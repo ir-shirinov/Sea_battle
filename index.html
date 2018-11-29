@@ -7,8 +7,10 @@
   <body>
     
     <section class="app">
+      <h1 class="app__game">Морской бой</h1>
       <div class="app__wrapper">
         <p class="app__user">Анатолий</p>
+        
         <p class="app__enemy">Враг</p>
       </div>
 
@@ -136,6 +138,7 @@
           </div>
 
         </div>
+        <p class="app__vs">VS</p>
 
         <div class="app__field app__field--enemy">
           <div class="app__row" data-row="0">
@@ -267,7 +270,23 @@
         <div class="app__text" id="info"></div>
       </div>
 
-      <button class="app__button" type="button" id="new">Новая игра</button>
+      <button class="app__button" type="button" id="restart">Новая игра</button>
+
+      <section class="app__poppup">
+        <label class="app__title">Ваше имя:</label>
+        <textarea class="app__name" id="name"></textarea>
+        <div class="app__options">
+          <p class="app__legend">Сложность:</p>
+          <input class="visually-hidden" type="radio" name="difficulty" id="easy" checked>
+          <label class="app__difficulty" for="easy">Легче легкого</label>
+          <input class="visually-hidden" type="radio" name="difficulty" id="middle">
+          <label class="app__difficulty" for="middle">Средне</label>
+          <input class="visually-hidden" type="radio" name="difficulty" id="heavy">
+          <label class="app__difficulty" for="heavy">Нереально трудно</label>
+        </div>
+        <button class="app__button app__button--big" type="button" id="new">
+        Начать игру</button>
+      </section>
     </section>
 
     

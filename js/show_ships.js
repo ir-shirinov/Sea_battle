@@ -1,5 +1,5 @@
+// Отрисовка кораблей на поле
 export default function (fieldArr, fieldElement) {
-
   for (let i = 0; i < fieldArr.length; i++) {
     for (let j = 0; j < fieldArr.length; j++) {
       const status = fieldArr[i][j];

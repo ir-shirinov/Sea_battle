@@ -1,3 +1,4 @@
+// Функции игры
 export default {
 
   // Функция возвращает подбит ли корабль целиком, или только поподание
@@ -173,5 +174,15 @@ export default {
     while (info.firstElementChild) {
       info.removeChild(info.firstElementChild);
     };
+  },
+
+  // Закрашивает пустые клетки попаданием в конце игры
+  paintAllCellsPoint: function (fieldElement) {
+    const cells = fieldElement.querySelectorAll('.app__cell');
+    for (let i = 0; i < cells.length; i++) {
+      if ((!cells[i].classList.contains('app__miss')) && (!cells[i].classList.contains('app__ship'))) {
+        cells[i].classList.add('app__miss');
+      }
+    }
   }
 }
