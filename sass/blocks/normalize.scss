@@ -16,38 +16,6 @@ a {
   background-color: transparent;
 }
 
-b,
-strong {
-  font-weight: bolder;
-}
-
-code,
-kbd,
-samp {
-  font-family: monospace, monospace; /* 1 */
-  font-size: 1em; /* 2 */
-}
-
-small {
-  font-size: 80%;
-}
-
-sub,
-sup {
-  font-size: 75%;
-  line-height: 0;
-  position: relative;
-  vertical-align: baseline;
-}
-
-sub {
-  bottom: -0.25em;
-}
-
-sup {
-  top: -0.5em;
-}
-
 img {
   border-style: none;
 }
@@ -95,20 +63,6 @@ button:-moz-focusring,
   outline: 1px dotted ButtonText;
 }
 
-fieldset {
-  padding: 0.35em 0.75em 0.625em;
-}
-
-
-legend {
-  box-sizing: border-box;
-  color: inherit; 
-  display: table; 
-  max-width: 100%; 
-  padding: 0;
-  white-space: normal;
-}
-
 textarea {
   overflow: auto;
 }
@@ -123,17 +77,6 @@ textarea {
 [type="number"]::-webkit-outer-spin-button {
   height: auto;
 }
-
-
-[type="search"] {
-  -webkit-appearance: textfield; 
-  outline-offset: -2px;
-}
-
-[type="search"]::-webkit-search-decoration {
-  -webkit-appearance: none;
-}
-
 
 ::-webkit-file-upload-button {
   -webkit-appearance: button; 
