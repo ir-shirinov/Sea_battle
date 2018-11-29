@@ -165,8 +165,8 @@ export default function (settingCurrentGame, elemFieldUser, info, elemFieldEnemy
       // Отрисуем поле, если выйграл ПК
       showShips(settingCurrentGame.fieldEnemy, elemFieldEnemy);
     } else if (!settingCurrentGame.flagUser) {
-      setTimeout(run, tools.randomInteger(500, 1500));
+      setTimeout(run, tools.randomInteger(1500, 2000));
     };
 
-  }, 1000);
+  }, 1500);
 };
