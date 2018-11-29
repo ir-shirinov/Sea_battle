@@ -1,6 +1,6 @@
 .app {
-  width: 1200px;
-  height: 700px;
+  width: 1000px;
+  height: 850px;
   margin: 0 auto;
   margin-top: 20px;
 
@@ -17,44 +17,33 @@
 .app__user {
   width: 350px;
   margin: 0;
-  margin-left: 100px;
-  margin-right: auto;
 
   font-size: 24px;
 
-  text-align: center;
+  text-align: left;
 }
 
 .app__enemy {
   width: 350px;
   margin: 0;
-  margin-right: 100px;
 
   font-size: 24px;
   color: $light-green;
 
-  text-align: center;
+  text-align: right;
 }
 
 .app__field {
   width: 350px;
   height: 350px;
-
-  &--user {
-    margin-left: 76px;
-  }
-
-  &--enemy {
-    margin-right: 76px;
-  }
 }
 
 .app__wrapper {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   padding-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .app__vs {
@@ -110,9 +99,7 @@
 .app__container {
   display: flex;
   justify-content: space-between;
-  width: 1000px;
-  margin: 0 auto;
-
+  margin: 0;
   margin-bottom: 15px;
 }
 
@@ -123,7 +110,7 @@
 
 .app__text {
   flex-grow: 1;
-  height: 200px;
+  height: 300px;
   margin-left: 50px;
   padding: 10px 20px;
 
@@ -208,8 +195,6 @@
 
 .app__hard {
   position: relative;
-
-  // background-image: none;
 
   &::before {
     content: '';
@@ -307,11 +292,10 @@
 
   background-color: #000;
   border: 1px solid $green;
+  outline: none;
 
   resize: none;
   overflow: hidden;
-
-  outline: none;
 }
 
 .app__legend {
@@ -379,3 +363,53 @@ input[type="radio"]:checked + .app__difficulty {
   width: 10px;
 }
 
+@media (max-height: 610px) {
+  .app {
+    height: 600px;
+    margin-top: 5px;
+  }
+
+  .app__game {
+    font-size: 20px;
+  }
+  
+  .app__user {
+    font-size: 18px;
+  }
+
+  .app__enemy {
+    font-size: 18px;
+  }
+
+  .app__field {
+    width: 250px;
+    height: 250px;
+  }
+
+  .app__row {
+    height: 25px;
+  }
+
+  .app__cell {
+    height: 25px;
+    width: 25px;
+  }
+
+  .app__wrapper {
+    margin: 0 200px;
+  }
+
+  .app__print {
+    font-size: 15px;
+    line-height: 18px;
+  }
+
+  .app__container {
+    margin: 0 200px;
+  }
+
+  .app__text {
+    height: 200px;
+    margin-bottom: 10px;
+  }
+}
